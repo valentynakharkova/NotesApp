@@ -6,10 +6,25 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct NotesListView: View {
+    
+    @Environment(\.modelContext) private var context
+    @Query(sort: \Note.dateCreated, order: .reverse) private var notes: [Note]
+    
+    @State private var viewModel: NotesViewModel?
+    
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        NavigationStack {
+            List {
+                ForEach(notes) { note in
+                    
+                }
+            }
+            .navigationTitle("All Notes")
+        }
     }
 }
 
