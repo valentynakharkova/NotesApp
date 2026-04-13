@@ -43,6 +43,11 @@ class NotesViewModel {
         context.delete(note)
     }
     
+    //MARK: Save Note
+    func saveNote() {
+        saveContext()
+    }
+    
     //MARK: Add Folder
     func addFolder(name: String) {
         let folder = Folder(name: name)
@@ -53,5 +58,10 @@ class NotesViewModel {
     //MARK: Delete Folder
     func deleteFolder(_ folder: Folder) {
         context.delete(folder)
+    }
+    
+    //MARK: Save Folder
+    func saveFolder(_ folder: Folder) {
+        saveContext()
     }
 }
