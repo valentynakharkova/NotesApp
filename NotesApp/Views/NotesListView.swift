@@ -17,17 +17,35 @@ struct NotesListView: View {
     
     
     var body: some View {
-        NavigationStack {
             List {
                 ForEach(notes) { note in
+                    NavigationLink {
+                        NotesDetailView(note: note)
+                    } label: {
+                        NoteRow(note: note)
+                    }
                     
                 }
             }
             .navigationTitle("All Notes")
-        }
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    NavigationLink {
+                        NewNoteView()
+                    } label: {
+                        Image(systemName: "square.and.pencil")
+                    }
+                }
+            }
+            .onAppear {
+                viewModel = NotesViewModel(context: context)
+            }
     }
 }
 
 #Preview {
-    NotesListView()
+    NavigationStack {
+        NotesListView()
+    }
+    .modelContainer(for: [Note.self, Folder.self], inMemory: true)
 }
