@@ -10,35 +10,48 @@ import SwiftData
 
 struct FoldersView: View {
     @Environment(\.modelContext) private var context
-    @Query(sort: \Note.dateCreated, order: .reverse) private var notes: [Note]
+    @Query(sort: \Folder.dateCreated, order: .forward) private var folders: [Folder]
     
     @State private var viewModel: NotesViewModel?
     @State private var showNewNote: Bool = false
+    @State private var showNewFolder: Bool = false
 
     var body: some View {
         NavigationStack {
             List {
-                ForEach(notes) { note in
-                    Text(note.title)
-                }
-                .onDelete { IndexSet in
-                    IndexSet.forEach { index in
-                        viewModel?.deleteNote(notes[index])
+                //MARK: All Notes Folder
+                Section {
+                    NavigationLink {
+                        NotesListView()
+                    } label: {
+                        Label {
+                            Text("All Notes")
+                        } icon: {
+                            Image(systemName: "folder.fill")
+                                .foregroundStyle(.indigo)
+                        }
+
                     }
+                }
+                ForEach(folders) { folder in
+                    
                 }
             }
             .navigationTitle("Folders")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
-                    NavigationLink {
-                        NewNoteView()
+                    Button {
+                        showNewFolder = true
                     } label: {
-                        Image(systemName: "square.and.pencil")
+                        Image(systemName: "folder.badge.plus")
                     }
                 }
             }
             .onAppear {
                 viewModel = NotesViewModel(context: context)
+            }
+            .sheet(isPresented: $showNewFolder) {
+                NewFolderView()
             }
         }
     }
