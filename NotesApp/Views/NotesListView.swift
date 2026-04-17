@@ -11,27 +11,116 @@ import SwiftData
 struct NotesListView: View {
     
     @Environment(\.modelContext) private var context
-    @Query(sort: \Note.dateCreated, order: .reverse) private var notes: [Note]
+    @Query private var notes: [Note]
     
     @State private var viewModel: NotesViewModel?
+    var folder: Folder?
+    var pinnedOnly: Bool
+
+    //MARK: Init
+    init(folder: Folder? = nil, pinnedOnly: Bool = false) {
+        self.folder = folder
+        self.pinnedOnly = pinnedOnly
+
+        if let folder {
+            let folder = folder.name
+            _notes = Query(
+                filter: #Predicate<Note> { note in
+                    note.folder?.name == folder
+                }, sort: \.dateModified, order: .reverse)
+        } else if pinnedOnly {
+            _notes = Query(filter: #Predicate<Note> { note in
+                note.isPinned == true
+            }, sort: \.dateModified, order: .reverse)
+        } else {
+            _notes = Query(sort: \.dateModified, order: .reverse)
+        }
+    }
     
+    var pinnedNotes: [Note] {
+        notes.filter{$0.isPinned}
+    }
+    var unpinnedNotes: [Note] {
+        notes.filter{!$0.isPinned}
+    }
+    //MARK: Group Notes by Month and Year
+    var groupedNotes: [(key: String, value: [Note])] {
+        let grouped = Dictionary(grouping: unpinnedNotes) { note -> String in
+            let formatter = DateFormatter()
+            formatter.dateFormat = "MMMM yyyy"
+            return formatter.string(from: note.dateModified)
+        }
+        return grouped.sorted { a, b in
+            let formatter = DateFormatter()
+            formatter.dateFormat = "MMMM yyyy"
+            let dateA = formatter.date(from: a.key) ?? .now
+            let dateB = formatter.date(from: b.key) ?? .now
+            return dateA > dateB
+        }
+    }
     
     var body: some View {
             List {
-                ForEach(notes) { note in
-                    NavigationLink {
-                        NotesDetailView(note: note)
-                    } label: {
-                        NoteRow(note: note)
+                //MARK: Pinned Section
+                if !pinnedNotes.isEmpty {
+                    Section("Pinned") {
+                        ForEach(pinnedNotes) { note in
+                            NavigationLink {
+                                NotesDetailView(note: note)
+                            } label: {
+                                NoteRow(note: note)
+                            }
+                            .swipeActions(edge: .trailing) {
+                                Button(role: .destructive) {
+                                    viewModel?.deleteNote(note)
+                                } label: {
+                                    Label("Delete", systemImage: "trash")
+                                }
+                            }
+                            .swipeActions(edge: .leading) {
+                                Button {
+                                    viewModel?.togglePin(note)
+                                } label: {
+                                    Label(note.isPinned ? "Unpin" : "Pin", systemImage: note.isPinned ? "pin.slash.fill" : "pin.fill")
+                                }
+                                .tint(.orange)
+                            }
+                        }
                     }
-                    
+                }
+                //MARK: Grouped by Month and Year
+                ForEach(groupedNotes, id: \.key) { group in
+                    Section(group.key) {
+                        ForEach(group.value) { note in
+                            NavigationLink {
+                                NotesDetailView(note: note)
+                            } label: {
+                                NoteRow(note: note)
+                            }
+                            .swipeActions(edge: .trailing) {
+                                Button(role: .destructive) {
+                                    viewModel?.deleteNote(note)
+                                } label: {
+                                    Label("Delete", systemImage: "trash")
+                                }
+                            }
+                            .swipeActions(edge: .leading) {
+                                Button {
+                                    viewModel?.togglePin(note)
+                                } label: {
+                                    Label(note.isPinned ? "Unpin" : "Pin", systemImage: note.isPinned ? "pin.slash.fill" : "pin.fill")
+                                }
+                                .tint(.orange)
+                            }
+                        }
+                    }
                 }
             }
-            .navigationTitle("All Notes")
+            .navigationTitle(folder?.name ?? "All Notes")
             .toolbar {
                 ToolbarItem(placement: .topBarTrailing) {
                     NavigationLink {
-                        NewNoteView()
+                        NewNoteView(folder: folder)
                     } label: {
                         Image(systemName: "square.and.pencil")
                     }
@@ -45,7 +134,7 @@ struct NotesListView: View {
 
 #Preview {
     NavigationStack {
-        NotesListView()
+        NotesListView( pinnedOnly: false)
     }
     .modelContainer(for: [Note.self, Folder.self], inMemory: true)
 }
