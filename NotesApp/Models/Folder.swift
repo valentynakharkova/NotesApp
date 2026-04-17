@@ -12,12 +12,16 @@ import SwiftData
 class Folder {
     var name: String
     var dateCreated: Date
+    var isPinned: Bool = false
+    var order: Int
     
-    @Relationship(deleteRule: .cascade) var notes: [Note]
+    @Relationship(deleteRule: .cascade, inverse: \Note.folder) var notes: [Note]
     
-    init(name: String) {
+    init(name: String, order: Int = 0) {
         self.name = name
         self.dateCreated = .now
+        self.isPinned = false
+        self.order = order
         self.notes = []
     }
 }

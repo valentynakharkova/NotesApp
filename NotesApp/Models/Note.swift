@@ -17,12 +17,12 @@ class Note {
     var isPinned: Bool
     var folder: Folder?
     
-    init(title: String, body: String) {
+    init(title: String, body: String, folder: Folder? = nil) {
         self.title = title
         self.body = body
         self.dateCreated = .now
         self.dateModified = .now
         self.isPinned = false
-        self.folder = nil
+        self.folder = folder
     }
 }
