@@ -5,7 +5,7 @@
 //  Created by Valentyna Kharkova on 19.03.2026.
 //
 
-import Foundation
+import SwiftUI
 import SwiftData
 
 @Observable
@@ -17,8 +17,9 @@ class NotesViewModel {
     }
     
     //MARK: Add Note
-    func addNote(title: String, body: String) {
+    func addNote(title: String, body: String, folder: Folder? = nil) {
         let note = Note(title: title, body: body)
+        note.folder = folder
         context.insert(note)
         saveContext()
     }
@@ -48,6 +49,12 @@ class NotesViewModel {
         saveContext()
     }
     
+    //MARK: Toggle Pin Note
+    func togglePin(_ note: Note) {
+        note.isPinned.toggle()
+        saveContext()
+    }
+    
     //MARK: Add Folder
     func addFolder(name: String) {
         let folder = Folder(name: name)
@@ -62,6 +69,22 @@ class NotesViewModel {
     
     //MARK: Save Folder
     func saveFolder(_ folder: Folder) {
+        saveContext()
+    }
+    
+    //MARK: Toggle Pin folder
+    func togglePin(_ folder: Folder) {
+        folder.isPinned.toggle()
+        saveContext()
+    }
+    
+    //MARK: Move Folder
+    func moveFolder(folders: [Folder], source: IndexSet, destination: Int) {
+        var reordered = folders
+        reordered.move(fromOffsets: source, toOffset: destination)
+        for (index, folder) in reordered.enumerated() {
+            folder.order = index
+        }
         saveContext()
     }
 }
