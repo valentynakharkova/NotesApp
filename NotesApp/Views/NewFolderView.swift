@@ -58,10 +58,11 @@ struct NewFolderView: View {
                             dismiss()
                     } label: {
                         Image(systemName: "checkmark")
-                            .foregroundStyle(.indigo)
+                            .foregroundStyle(.white.opacity(0.7))
                     }
+                    .buttonStyle(.borderedProminent)
+                    .tint(.indigo.opacity(0.7))
                 }
-                
             }
             .onAppear {
                 viewModel = NotesViewModel(context: context)

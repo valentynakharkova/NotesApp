@@ -13,6 +13,8 @@ struct NewNoteView: View {
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
     
+    var folder: Folder?
+        
     @State private var title: String = ""
     @State private var noteBody: String = ""
     @State private var viewModel: NotesViewModel?
@@ -37,7 +39,7 @@ struct NewNoteView: View {
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("Save") {
                         guard !title.isEmpty else { return }
-                        viewModel?.addNote(title: title, body: noteBody)
+                        viewModel?.addNote(title: title, body: noteBody, folder: folder)
                         dismiss()
                     }
                     .fontWeight(.semibold)

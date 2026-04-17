@@ -14,7 +14,7 @@ struct NotesDetailView: View {
     
     @Bindable var note: Note
     @State private var viewModel: NotesViewModel?
-        
+            
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             TextField("Title", text: $note.title)
