@@ -14,8 +14,10 @@ class Folder {
     var dateCreated: Date
     var isPinned: Bool = false
     var order: Int
+    var isDeleted: Bool = false
+    var deleteDate: Date?
     
-    @Relationship(deleteRule: .cascade, inverse: \Note.folder) var notes: [Note]
+    @Relationship(deleteRule: .nullify, inverse: \Note.folder) var notes: [Note]
     
     init(name: String, order: Int = 0) {
         self.name = name
@@ -23,5 +25,6 @@ class Folder {
         self.isPinned = false
         self.order = order
         self.notes = []
+        self.isDeleted = false
     }
 }
