@@ -23,10 +23,10 @@ struct NewNoteView: View {
     var body: some View {
         NavigationStack {
             VStack(alignment: .leading, spacing: 16) {
-                TextField("Title", text: $title)
+                TextField("Title", text: $title, axis: .vertical)
                     .font(.largeTitle)
                     .fontWeight(.bold)
-                TextField("Start writing...", text: $noteBody)
+                TextField("Start writing...", text: $noteBody, axis: .vertical)
                     .font(.body)
                     .foregroundStyle(.primary)
                 
