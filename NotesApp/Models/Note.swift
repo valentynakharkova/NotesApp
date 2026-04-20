@@ -15,7 +15,9 @@ class Note {
     var dateCreated: Date
     var dateModified: Date
     var isPinned: Bool
+    var isDeleted: Bool
     var folder: Folder?
+    var deleteDate: Date?
     
     init(title: String, body: String, folder: Folder? = nil) {
         self.title = title
@@ -23,6 +25,7 @@ class Note {
         self.dateCreated = .now
         self.dateModified = .now
         self.isPinned = false
+        self.isDeleted = false
         self.folder = folder
     }
 }
