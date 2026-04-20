@@ -58,10 +58,10 @@ struct NewFolderView: View {
                             dismiss()
                     } label: {
                         Image(systemName: "checkmark")
-                            .foregroundStyle(.white.opacity(0.7))
+                            .foregroundStyle(.white)
                     }
                     .buttonStyle(.borderedProminent)
-                    .tint(.indigo.opacity(0.7))
+                    .tint(.indigo)
                 }
             }
             .onAppear {
