@@ -12,8 +12,12 @@ struct NotesListView: View {
     
     @Environment(\.modelContext) private var context
     @Query private var notes: [Note]
+    @Query private var folders: [Folder]
     
     @State private var viewModel: NotesViewModel?
+    @State private var noteToMove: Note?
+    @State private var showMoveDialog = false
+    
     var folder: Folder?
     var pinnedOnly: Bool
 
@@ -34,7 +38,9 @@ struct NotesListView: View {
                 note.isPinned == true
             }, sort: \.dateModified, order: .reverse)
         } else {
-            _notes = Query(sort: \.dateModified, order: .reverse)
+            _notes = Query(filter: #Predicate<Note> { note in
+                note.folder == nil
+            }, sort: \.dateModified, order: .reverse)
         }
     }
     
@@ -86,6 +92,23 @@ struct NotesListView: View {
             .onAppear {
                 viewModel = NotesViewModel(context: context)
             }
+            .confirmationDialog("Move to folder", isPresented: $showMoveDialog) {
+                ForEach(folders) { folder in
+                    Button(folder.name) {
+                        noteToMove?.folder = folder
+                        noteToMove = nil
+                    }
+                }
+                
+                Button("Remove from folder", role: .destructive) {
+                    noteToMove?.folder = nil
+                    noteToMove = nil
+                }
+                
+                Button("Cancel", role: .cancel) {
+                    noteToMove = nil
+                }
+            }
     }
     var pinnedSection: some View {
                 ForEach(pinnedNotes) { note in
@@ -100,6 +123,13 @@ struct NotesListView: View {
                         } label: {
                             Label("Delete", systemImage: "trash")
                         }
+                        Button {
+                            noteToMove = note
+                            showMoveDialog = true
+                        } label: {
+                            Label("Move", systemImage: "folder")
+                        }
+                        .tint(.blue)
                     }
                     .swipeActions(edge: .leading) {
                         Button {
@@ -129,6 +159,13 @@ struct NotesListView: View {
                         } label: {
                             Label("Delete", systemImage: "trash")
                         }
+                        Button {
+                            noteToMove = note
+                            showMoveDialog = true
+                        } label: {
+                            Label("Move", systemImage: "folder")
+                        }
+                        .tint(.blue)
                     }
                     .swipeActions(edge: .leading) {
                         Button {
