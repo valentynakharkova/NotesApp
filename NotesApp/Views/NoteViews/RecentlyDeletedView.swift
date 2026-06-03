@@ -35,24 +35,24 @@ struct RecentlyDeletedView: View {
             //MARK: Deleted Notes
             if !deletedNotes.isEmpty {
                 Section {
-                        ForEach(deletedNotes) { note in
-                            HStack {
-                                if isEditing {
-                                    Image(systemName: selectedNotes.contains(note.id) ? "checkmark.circle.fill" : "circle")
-                                        .font(.title2)
-                                        .foregroundStyle(selectedNotes.contains(note.id) ? .indigo : .gray)
-                                }
-                                NavigationLink {
-                                    NotesDetailView(note: note)
-                                } label: {
-                                    NoteRow(note: note)
-                                }
+                    ForEach(deletedNotes) { note in
+                        HStack {
+                            if isEditing {
+                                Image(systemName: selectedNotes.contains(note.id) ? "checkmark.circle.fill" : "circle")
+                                    .font(.title2)
+                                    .foregroundStyle(selectedNotes.contains(note.id) ? .indigo : .gray)
                             }
-                            .onTapGesture {
-                                guard isEditing else { return }
-                                toggleNote(note)
+                            NavigationLink {
+                                NotesDetailView(note: note)
+                            } label: {
+                                NoteRow(note: note)
                             }
                         }
+                        .onTapGesture {
+                            guard isEditing else { return }
+                            toggleNote(note)
+                        }
+                    }
                 }
             }
         }
@@ -112,12 +112,12 @@ struct RecentlyDeletedView: View {
                     }
                 }
             }
-
+            
         }
         .onAppear {
             viewModel = NotesViewModel(context: context)
             viewModel?.clenupExpiredNotes(notes: deletedNotes)
-//            viewModel?.clenupExpiredFolders(folders: deletedFolders)
+            //            viewModel?.clenupExpiredFolders(folders: deletedFolders)
         }
         .overlay {
             if isEmpty {
@@ -145,27 +145,13 @@ private extension RecentlyDeletedView {
         }
     }
     
-//    func toggleFolder(_ folder: Folder) {
-//        if selectedFolders.contains(folder.id) {
-//            selectedFolders.remove(folder.id)
-//        } else {
-//            selectedFolders.insert(folder.id)
-//        }
-//    }
-    
     func restoreSelected() {
         selectedNotes.forEach { id in
             if let note = deletedNotes.first(where: { $0.id == id }) {
                 viewModel?.restoreNote(note)
             }
         }
-//        selectedFolders.forEach { id in
-//            if let folder = deletedFolders.first(where: { $0.id == id }) {
-//                viewModel?.restoreFolder(folder)
-//            }
-//        }
         selectedNotes.removeAll()
-//        selectedFolders.removeAll()
         isEditing = false
     }
     
@@ -175,24 +161,16 @@ private extension RecentlyDeletedView {
                 viewModel?.permanentlyDeleteNote(note)
             }
         }
-//        selectedFolders.forEach { id in
-//            if let folder = deletedFolders.first(where: { $0.id == id }) {
-//                viewModel?.permanentlyDeleteFolder(folder)
-//            }
-//        }
         selectedNotes.removeAll()
-//        selectedFolders.removeAll()
         isEditing = false
     }
     
     func restoreAll() {
         deletedNotes.forEach { viewModel?.restoreNote($0) }
-//        deletedFolders.forEach { viewModel?.restoreFolder($0) }
     }
     
     func deleteAll() {
         deletedNotes.forEach { viewModel?.permanentlyDeleteNote($0) }
-//        deletedFolders.forEach { viewModel?.permanentlyDeleteFolder($0) }
     }
 }
 

@@ -8,7 +8,7 @@
 import SwiftUI
 import UIKit
 import Combine
-//@Observable
+
 class RichTextEditorViewModel: ObservableObject {
     
     @Published var attributedText = NSAttributedString(string: "")

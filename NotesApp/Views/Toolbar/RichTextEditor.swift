@@ -65,8 +65,8 @@ struct RichTextEditor: UIViewRepresentable {
             
             if attrs[.foregroundColor] == nil  ||
                 (attrs[.foregroundColor] as? UIColor) == .secondaryLabel {
-                    attrs[.foregroundColor] = UIColor.label
-                }
+                attrs[.foregroundColor] = UIColor.label
+            }
             
             if textView.typingAttributes as NSDictionary != attrs as NSDictionary {
                 textView.typingAttributes = attrs

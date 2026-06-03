@@ -25,12 +25,7 @@ class NotesViewModel {
         context.insert(note)
         saveContext()
     }
-//    func addNote(title: String, body: AttributedString = AttributedString(), folder: Folder? = nil) {
-//        let note = Note(title: title, body: body)
-//        note.folder = folder
-//        context.insert(note)
-//        saveContext()
-//    }
+    
     //MARK: Save Context
     private func saveContext() {
         do {

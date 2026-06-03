@@ -20,13 +20,12 @@ struct NotesListView: View {
     
     var folder: Folder?
     var pinnedOnly: Bool
-
-
+    
     //MARK: Init
     init(folder: Folder? = nil, pinnedOnly: Bool = false) {
         self.folder = folder
         self.pinnedOnly = pinnedOnly
-
+        
         if let folder {
             let folder = folder.name
             _notes = Query(
@@ -67,81 +66,81 @@ struct NotesListView: View {
     }
     
     var body: some View {
-            List {
-                //MARK: Pinned Section
-                if !pinnedNotes.isEmpty {
-                    Section("Pinned") {
-                        pinnedSection
-
-                    }
-                }
-                //MARK: Grouped by Month and Year
-                groupedNotesSection
-
-            }
-            .navigationTitle(folder?.name ?? "All Notes")
-            .toolbar {
-                ToolbarItem(placement: .topBarTrailing) {
-                    NavigationLink {
-                        NewNoteView(folder: folder)
-                    } label: {
-                        Image(systemName: "square.and.pencil")
-                    }
+        List {
+            //MARK: Pinned Section
+            if !pinnedNotes.isEmpty {
+                Section("Pinned") {
+                    pinnedSection
+                    
                 }
             }
-            .onAppear {
-                viewModel = NotesViewModel(context: context)
+            //MARK: Grouped by Month and Year
+            groupedNotesSection
+            
+        }
+        .navigationTitle(folder?.name ?? "All Notes")
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                NavigationLink {
+                    NewNoteView(folder: folder)
+                } label: {
+                    Image(systemName: "square.and.pencil")
+                }
             }
-            .confirmationDialog("Move to folder", isPresented: $showMoveDialog) {
-                ForEach(folders) { folder in
-                    Button(folder.name) {
-                        noteToMove?.folder = folder
-                        noteToMove = nil
-                    }
-                }
-                
-                Button("Remove from folder", role: .destructive) {
-                    noteToMove?.folder = nil
-                    noteToMove = nil
-                }
-                
-                Button("Cancel", role: .cancel) {
+        }
+        .onAppear {
+            viewModel = NotesViewModel(context: context)
+        }
+        .confirmationDialog("Move to folder", isPresented: $showMoveDialog) {
+            ForEach(folders) { folder in
+                Button(folder.name) {
+                    noteToMove?.folder = folder
                     noteToMove = nil
                 }
             }
+            
+            Button("Remove from folder", role: .destructive) {
+                noteToMove?.folder = nil
+                noteToMove = nil
+            }
+            
+            Button("Cancel", role: .cancel) {
+                noteToMove = nil
+            }
+        }
     }
     var pinnedSection: some View {
-                ForEach(pinnedNotes) { note in
-                    NavigationLink {
-                        NotesDetailView(note: note)
-                    } label: {
-                        NoteRow(note: note)
-                    }
-                    .swipeActions(edge: .trailing) {
-                        Button(role: .destructive) {
-                            viewModel?.softDeleteNote(note)
-                        } label: {
-                            Label("Delete", systemImage: "trash")
-                        }
-                        Button {
-                            noteToMove = note
-                            showMoveDialog = true
-                        } label: {
-                            Label("Move", systemImage: "folder")
-                        }
-                        .tint(.blue)
-                    }
-                    .swipeActions(edge: .leading) {
-                        Button {
-                            viewModel?.togglePin(note)
-                        } label: {
-                            let title = note.isPinned ? "Unpin" : "Pin"
-                            let imageName = note.isPinned ? "pin.slash.fill" : "pin.fill"
-                            Label(title, systemImage: imageName)
-                        }
-                        .tint(.orange)
-                    }
+        ForEach(pinnedNotes) { note in
+            NavigationLink {
+                NotesDetailView(note: note)
+            } label: {
+                NoteRow(note: note)
+            }
+            .swipeActions(edge: .trailing) {
+                Button(role: .destructive) {
+                    viewModel?.softDeleteNote(note)
+                } label: {
+                    Label("Delete", systemImage: "trash")
                 }
+                Button {
+                    noteToMove = note
+                    showMoveDialog = true
+                } label: {
+                    Label("Move", systemImage: "folder")
+                }
+                .tint(.blue)
+            }
+            .swipeActions(edge: .leading) {
+                Button {
+                    viewModel?.togglePin(note)
+                } label: {
+                    let title = note.isPinned ? "Unpin" : "Pin"
+                    let imageName = note.isPinned ? "pin.slash.fill" : "pin.fill"
+                    Label(title, systemImage: imageName)
+                }
+                .tint(.orange)
+            }
+        }
     }
     
     var groupedNotesSection: some View {

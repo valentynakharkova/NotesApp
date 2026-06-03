@@ -40,16 +40,6 @@ struct FoldersView: View {
             }
         }
     }
-//    var filteredNotes: [Note] {
-//        if searchText.isEmpty {
-//            return []
-//        } else {
-//            return allNoes.filter {
-//                $0.title.localizedStandardContains(searchText) ||
-//                String($0.body.characters).localizedStandardContains(searchText)
-//            }
-//        }
-//    }
     
     var body: some View {
         NavigationStack {
