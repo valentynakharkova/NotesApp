@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import UIKit
 
 @Observable
 class NotesViewModel {
@@ -17,12 +18,19 @@ class NotesViewModel {
     }
     
     //MARK: Add Note
-    func addNote(title: String, body: String, folder: Folder? = nil) {
-        let note = Note(title: title, body: body)
+    func addNote(title: String, attributedBody: NSAttributedString = NSAttributedString(), folder: Folder? = nil) {
+        let note = Note(title: title)
         note.folder = folder
+        note.setAttributedBody(attributedBody)
         context.insert(note)
         saveContext()
     }
+//    func addNote(title: String, body: AttributedString = AttributedString(), folder: Folder? = nil) {
+//        let note = Note(title: title, body: body)
+//        note.folder = folder
+//        context.insert(note)
+//        saveContext()
+//    }
     //MARK: Save Context
     private func saveContext() {
         do {
@@ -33,9 +41,9 @@ class NotesViewModel {
     }
     
     //MARK: Edit Note
-    func editNote(_ note: Note, _ title: String, _ body: String) {
+    func editNote(_ note: Note, _ title: String, _ body: NSAttributedString = NSAttributedString()) {
         note.title = title
-        note.body = body
+        note.setAttributedBody(body)
         saveContext()
     }
     
@@ -101,30 +109,6 @@ class NotesViewModel {
         context.delete(folder)
         saveContext()
     }
-    
-    //MARK: Restore Folder
-//    func restoreFolder(_ folder: Folder) {
-//        folder.isDeleted = false
-//        folder.deleteDate = nil
-//        saveContext()
-//    }
-        
-    //MARK: Permanently Delete Folder
-//    func permanentlyDeleteFolder(_ folder: Folder) {
-//        context.delete(folder)
-//        saveContext()
-//    }
-    
-    //MARK: Cleanup expires Folders older than 30 days
-//    func clenupExpiredFolders(folders: [Folder]) {
-//        let expiredFolders = Calendar.current.date(byAdding: .day, value: -30, to: .now) ?? .now
-//        for folder in folders {
-//            if let deleteDate = folder.deleteDate, deleteDate < expiredFolders {
-//                context.delete(folder)
-//            }
-//        }
-//        saveContext()
-//    }
     
     //MARK: Save Folder
     func saveFolder(_ folder: Folder) {
