@@ -29,13 +29,20 @@ struct RichTextEditor: UIViewRepresentable {
         textView.textColor = .label
         textView.textContainerInset = UIEdgeInsets(top: 12, left: 8, bottom: 12, right: 8)
         textView.delegate = context.coordinator
+        textView.keyboardDismissMode = .interactive
         
         let tap = UITapGestureRecognizer(
             target: context.coordinator,
             action: #selector(Coordinator.handleTap(_:)))
         
+        let pan = UIPanGestureRecognizer(
+            target: context.coordinator,
+            action: #selector(Coordinator.handlePan(_:))
+        )
+        
         tap.delegate = context.coordinator
         textView.addGestureRecognizer(tap)
+        textView.addGestureRecognizer(pan)
         
         return textView
     }
@@ -45,6 +52,7 @@ struct RichTextEditor: UIViewRepresentable {
             uiView.attributedText = attributedText
         }
     }
+    
     
     //MARK: - Coordinator
     class Coordinator: NSObject, UITextViewDelegate, UIGestureRecognizerDelegate {
@@ -79,6 +87,14 @@ struct RichTextEditor: UIViewRepresentable {
             shouldRecognizeSimultaneouslyWith other: UIGestureRecognizer
         ) -> Bool {
             return true
+        }
+        
+        @objc func handlePan(_ gesture: UIPanGestureRecognizer) {
+            let velocity = gesture.velocity(in: gesture.view)
+            let translation = gesture.translation(in: gesture.view)
+            
+            guard velocity.y > 300, translation.y > 20 else { return }
+            parent.textView.resignFirstResponder()
         }
     }
 }

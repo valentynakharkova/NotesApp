@@ -12,106 +12,114 @@ extension RichTextEditor.Coordinator {
     
     //MARK: - Insert Checklist
     func insertChecklist(in textView: UITextView) {
-            let storage = textView.textStorage
-            let attachment = makeCheckboxAttachment(checked: false)
-
-            func makeAttachmentString() -> NSAttributedString {
-                let attachmentString = NSMutableAttributedString(attachment: attachment)
-                attachmentString.append(NSAttributedString(
-                    string: " ",
-                    attributes: [
-                        .font: UIFont.systemFont(ofSize: 16),
-                        .foregroundColor: UIColor.label
-                    ]
-                ))
-                return attachmentString
-            }
-
-            let defaultTypingAttrs: [NSAttributedString.Key: Any] = [
-                .font: UIFont.systemFont(ofSize: 16),
-                .foregroundColor: UIColor.label
-            ]
-
-            guard storage.length > 0 else {
-                let attachmentString = makeAttachmentString()
-                storage.beginEditing()
-                storage.setAttributedString(attachmentString)
-                storage.endEditing()
-
-                if let pos = textView.position(from: textView.beginningOfDocument, offset: 2) {
-                    textView.selectedTextRange = textView.textRange(from: pos, to: pos)
-                }
-                textView.typingAttributes = defaultTypingAttrs
-                parent.attributedText = textView.attributedText
-                return
-            }
-
-            guard let selectedTextRange = textView.selectedTextRange else { return }
-            let range = textView.nsRange(from: selectedTextRange)
-            let text = textView.text as NSString
-            let lineRange = text.lineRange(for: NSRange(location: range.location, length: 0))
-
-            guard lineRange.location <= storage.length else { return }
-
-            var hasCheckbox = false
-            if lineRange.location < storage.length {
-                hasCheckbox = storage.attribute(
-                    .attachment,
-                    at: lineRange.location,
-                    effectiveRange: nil
-                ) is NSTextAttachment
-            }
-
-            if hasCheckbox {
-                storage.beginEditing()
-                let removeRange = NSRange(location: lineRange.location, length: 2)
-                // Безопасное удаление, чтобы не выйти за пределы массива
-                if removeRange.location + removeRange.length <= storage.length {
-                    storage.deleteCharacters(in: removeRange)
-                }
-                storage.endEditing()
-
-                textView.typingAttributes = defaultTypingAttrs
-                parent.attributedText = textView.attributedText
-                return
-            }
-
-            let lineText: String
-            if lineRange.location < storage.length {
-                lineText = text.substring(with: lineRange).trimmingCharacters(in: .whitespacesAndNewlines)
-            } else {
-                lineText = ""
-            }
-
-            if lineText.isEmpty {
-                let attachmentString = makeAttachmentString()
-
-                storage.beginEditing()
-                storage.insert(attachmentString, at: lineRange.location)
-                storage.endEditing()
-
-                let cursorOffset = lineRange.location + 2
-                if let pos = textView.position(from: textView.beginningOfDocument, offset: cursorOffset) {
-                    textView.selectedTextRange = textView.textRange(from: pos, to: pos)
-                }
-                textView.typingAttributes = defaultTypingAttrs
-                parent.attributedText = textView.attributedText
-                return
-            }
-
+        let storage = textView.textStorage
+        let attachment = makeCheckboxAttachment(checked: false)
+        
+        let checklistStyle = NSMutableParagraphStyle()
+        checklistStyle.firstLineHeadIndent = 8
+        checklistStyle.headIndent = 24
+                
+        func makeAttachmentString() -> NSAttributedString {
+            let attachmentString = NSMutableAttributedString(attachment: attachment)
+            attachmentString.append(NSAttributedString(
+                string: " ",
+                attributes: [
+                    .font: UIFont.systemFont(ofSize: 16),
+                    .foregroundColor: UIColor.label,
+                    .paragraphStyle: checklistStyle,
+                    //MARK: Kern sets the spacing, or kerning, between characters
+                    .kern: 4
+                ]
+            ))
+            attachmentString.addAttribute(.paragraphStyle, value: checklistStyle, range: NSRange(location: 0, length: attachmentString.length))
+            return attachmentString
+        }
+        
+        let defaultTypingAttrs: [NSAttributedString.Key: Any] = [
+            .font: UIFont.systemFont(ofSize: 16),
+            .foregroundColor: UIColor.label,
+            .paragraphStyle: checklistStyle
+        ]
+        
+        guard storage.length > 0 else {
             let attachmentString = makeAttachmentString()
-
             storage.beginEditing()
-            storage.insert(attachmentString, at: lineRange.location)
+            storage.setAttributedString(attachmentString)
             storage.endEditing()
-
-            let newCursorOffset = range.location + 2
-            if let pos = textView.position(from: textView.beginningOfDocument, offset: newCursorOffset) {
+            
+            if let pos = textView.position(from: textView.beginningOfDocument, offset: 2) {
                 textView.selectedTextRange = textView.textRange(from: pos, to: pos)
             }
             textView.typingAttributes = defaultTypingAttrs
             parent.attributedText = textView.attributedText
+            return
         }
+        
+        guard let selectedTextRange = textView.selectedTextRange else { return }
+        let range = textView.nsRange(from: selectedTextRange)
+        let text = textView.text as NSString
+        let lineRange = text.lineRange(for: NSRange(location: range.location, length: 0))
+        
+        guard lineRange.location <= storage.length else { return }
+        
+        var hasCheckbox = false
+        if lineRange.location < storage.length {
+            hasCheckbox = storage.attribute(
+                .attachment,
+                at: lineRange.location,
+                effectiveRange: nil
+            ) is NSTextAttachment
+        }
+        
+        if hasCheckbox {
+            storage.beginEditing()
+            let removeRange = NSRange(location: lineRange.location, length: 2)
+            if removeRange.location + removeRange.length <= storage.length {
+                storage.deleteCharacters(in: removeRange)
+            }
+            storage.endEditing()
+            
+            textView.typingAttributes = defaultTypingAttrs
+            parent.attributedText = textView.attributedText
+            return
+        }
+        
+        let lineText: String
+        if lineRange.location < storage.length {
+            lineText = text.substring(with: lineRange).trimmingCharacters(in: .whitespacesAndNewlines)
+        } else {
+            lineText = ""
+        }
+        
+        if lineText.isEmpty {
+            let attachmentString = makeAttachmentString()
+            
+            storage.beginEditing()
+            storage.insert(attachmentString, at: lineRange.location)
+            storage.endEditing()
+            
+            let cursorOffset = lineRange.location + 2
+            if let pos = textView.position(from: textView.beginningOfDocument, offset: cursorOffset) {
+                textView.selectedTextRange = textView.textRange(from: pos, to: pos)
+            }
+            textView.typingAttributes = defaultTypingAttrs
+            parent.attributedText = textView.attributedText
+            return
+        }
+        
+        let attachmentString = makeAttachmentString()
+        
+        storage.beginEditing()
+        storage.insert(attachmentString, at: lineRange.location)
+        storage.endEditing()
+        
+        let newCursorOffset = range.location + 2
+        if let pos = textView.position(from: textView.beginningOfDocument, offset: newCursorOffset) {
+            textView.selectedTextRange = textView.textRange(from: pos, to: pos)
+        }
+        textView.typingAttributes = defaultTypingAttrs
+        parent.attributedText = textView.attributedText
+    }
     
     //MARK: - Toggle Checkmark
     func toggleCheckmark(at location: Int, in textView: UITextView) {
@@ -137,10 +145,22 @@ extension RichTextEditor.Coordinator {
         storage.beginEditing()
         
         let newAttachmentString = NSMutableAttributedString(attachment: newAttachment)
-        newAttachmentString.append(NSAttributedString(
-            string: " ",
-            attributes: [.font: UIFont.systemFont(ofSize: 16), .foregroundColor: UIColor.label]
-        ))
+        newAttachmentString.append(
+            NSAttributedString(
+                string: " ",
+                attributes: [
+                    .font: UIFont.systemFont(ofSize: 16),
+                    .foregroundColor: UIColor.label,
+                    .kern: 4
+                ]
+            )
+        )
+        
+        let checklistStyle = NSMutableParagraphStyle()
+        checklistStyle.firstLineHeadIndent = 8
+        checklistStyle.headIndent = 24
+        newAttachmentString.addAttribute(.paragraphStyle, value: checklistStyle, range: NSRange(location: 0, length: newAttachmentString.length))
+        
         storage.replaceCharacters(in: NSRange(location: effectiveRange.location, length: 2), with: newAttachmentString)
         
         if textLength > 0 {
@@ -228,9 +248,15 @@ extension RichTextEditor.Coordinator {
             string: " ",
             attributes: [
                 .font: UIFont.systemFont(ofSize: 16),
-                .foregroundColor: UIColor.label
+                .foregroundColor: UIColor.label,
+                .kern: 4
             ]
         ))
+        
+        let checklistStyle = NSMutableParagraphStyle()
+        checklistStyle.firstLineHeadIndent = 8
+        checklistStyle.headIndent = 24
+        newLine.addAttribute(.paragraphStyle, value: checklistStyle, range: NSRange(location: 0, length: newLine.length))
         
         storage.beginEditing()
         storage.insert(newLine, at: range.location)

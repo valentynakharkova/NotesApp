@@ -23,8 +23,8 @@ extension RichTextEditor.Coordinator {
             let style = NSMutableParagraphStyle()
             if let list {
                 style.textLists = [list]
-                style.firstLineHeadIndent = 16
-                style.headIndent = 32
+                style.firstLineHeadIndent = 8
+                style.headIndent = 24
                 style.tabStops = []
                 style.defaultTabInterval = 0
             }
@@ -66,7 +66,7 @@ extension RichTextEditor.Coordinator {
         if let sel = textView.selectedTextRange, !sel.isEmpty {
             selectedRange = textView.nsRange(from: sel)
         } else {
-            selectedRange = textView.cursorNSRange // Убедись, что у тебя есть это расширение/свойство
+            selectedRange = textView.cursorNSRange
         }
         
         let text = textView.text as NSString
@@ -144,8 +144,8 @@ extension RichTextEditor.Coordinator {
                     style.firstLineHeadIndent = 0
                 } else if let list = newList {
                     style.textLists = [list]
-                    style.firstLineHeadIndent = 16
-                    style.headIndent = 32
+                    style.firstLineHeadIndent = 8
+                    style.headIndent = 20
                     style.tabStops = []
                     style.defaultTabInterval = 0
                 }

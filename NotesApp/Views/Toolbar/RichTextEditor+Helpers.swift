@@ -32,7 +32,7 @@ extension RichTextEditor.Coordinator {
             .applying(UIImage.SymbolConfiguration(paletteColors: [checked ? .systemIndigo : .label]))
         let imageName = checked ? "checkmark.circle.fill" : "circle"
         attachment.image = UIImage(systemName: imageName, withConfiguration: config)
-        attachment.bounds = CGRect(x: 0, y: -3, width: 22, height: 22)
+        attachment.bounds = CGRect(x: 0, y: -3, width: 20, height: 20)
         
         return attachment
     }
