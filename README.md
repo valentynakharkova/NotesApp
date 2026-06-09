@@ -117,11 +117,11 @@ NotesApp/
 
 - iOS 26.0+
 - Xcode 26+
-- Swift 5.9+
+- Swift 5.0+
 
 ## Author
 Valentyna Kharkova — Junior iOS Developer
-Building a native iOS portfolio | 2025–2026
+Building a native iOS portfolio | 2026
 
 
 
