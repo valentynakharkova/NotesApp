@@ -40,7 +40,61 @@ A full-featured notes application for iOS, inspired by Apple Notes, as a part of
 2. Notes are matched against both title and body content.
 
 ## Tech Stack 
-1. 
+1. **SwiftUI** - all Views, Navigation, Toolbar, Search;
+2. **SwiftData** - Persistent storage with @Model, @Query, @Bindable;
+3. **UIKit** - UITextView for rich text editing;
+4. **UIViewRepresentable** - SwiftUI <--> UIKit bridge;
+5. **NSAttributedString** - Rich text storage and manipulation;
+6. **NSTextStorage** - Direct text editing with beginEditing/endEditing;
+7. **NSTextAttachment** - Checkbox rendering with SF Symbols;
+8. **NSTextList** - Bullet, numbered, and dash list formatting;
+9. NSParagraphStyle - Indentation, alignment, list configuration;
+10. UIPanGestureRecognizer - Swipe-to-dismiss keyboard;
+11. UITapGestureRecognizer - Checkbox tap detection;
+12. RTF encoding - Attributed text serialized to Data via RTF for SwiftData storage.
+
+## Architecture 
+
+NotesApp/
+├── Models/
+│   ├── Note.swift               — SwiftData model; RTF encode/decode for attributed body
+│   └── Folder.swift             — SwiftData model with nullify delete rule for notes
+│
+├── ViewModels/
+│   ├── NotesViewModel.swift     — CRUD for notes and folders; soft delete; pin; move
+│   └── RichTextEditorViewModel.swift — Owns UITextView instance; bridges state to SwiftUI
+│
+├── Views/
+│   ├── FoldersView.swift        — Root screen; folder list; search; navigation
+│   ├── NotesListView.swift      — Notes grouped by date; pin section; swipe actions
+│   ├── NotesDetailView.swift    — Edit existing note; auto-save on disappear
+│   ├── NewNoteView.swift        — Create new note with Save button
+│   ├── NewFolderView.swift      — Sheet for creating a new folder
+│   ├── RecentlyDeletedView.swift — Soft-deleted notes; batch restore and delete
+│   ├── NoteRow.swift            — List row with title, date, and body preview
+│   └── FormattingToolbar.swift  — Horizontal scroll toolbar above the keyboard
+│
+└── RichTextEditor/
+    ├── RichTextEditor.swift           — UIViewRepresentable base + Coordinator
+    ├── RichTextEditor+Enums.swift     — TextStyle and ListType enums
+    ├── RichTextEditor+Formatting.swift — Bold, italic, underline, strikethrough, alignment, text style
+    ├── RichTextEditor+Lists.swift     — NSTextList insertion, toggling, cursor restoration
+    ├── RichTextEditor+Checklist.swift — Checkbox insert, toggle, Enter key handling
+    └── RichTextEditor+Helpers.swift   — NSTextAttachment factory, UITextView extensions
+
+## Key Design Decisions 
+**UIKit UITextView over native SwiftUI TextEditor:**  
+  SwiftUI's TextEditor with AttributedString (iOS 18) was explored but lacks the control needed for checklists, list indentation, and gesture handling. UITextView with          NSAttributedString provides direct access to NSTextStorage.
+**ViewModel owns UITextView:**
+  RichTextEditorViewModel creates and owns the UITextView instance, passing it into both RichTextEditor (for rendering) and FormattingToolbar (for formatting). This avoids      duplicating state and keeps the view layer thin.
+NSTextAttachment subclasses for checkbox state
+Checkbox state is tracked via UncheckedAttachment and CheckedAttachment subclasses rather than image comparison. This makes toggle detection reliable with a simple is check.
+RTF serialization for SwiftData
+NSAttributedString is encoded to Data using RTF format and stored in Note.bodyData. On read, it is decoded back. This preserves all formatting attributes including fonts, colors, lists, and attachments across sessions.
+Soft delete pattern
+Notes and folders are never immediately deleted. An isDeleted flag moves them to Recently Deleted, and a deleteDate enables automatic cleanup after 30 days via cleanupExpiredNotes.
+
+
 
 
 
