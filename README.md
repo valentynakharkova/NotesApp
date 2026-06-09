@@ -5,6 +5,19 @@ A full-featured notes application for iOS, inspired by Apple Notes, as a part of
 ## Screenshots 
 <img width="660" height="1434" alt="IMG_7959" src="https://github.com/user-attachments/assets/5e735c33-f80d-425e-b4cd-6008146ce351" />
 <img width="660" height="1434" alt="IMG_7960" src="https://github.com/user-attachments/assets/b130f3cb-6862-4dbc-a213-2656f47f9316" />
+<img width="660" height="1434" alt="IMG_7963" src="https://github.com/user-attachments/assets/5d5192d1-8518-491b-82ac-3ea51cc0a1c9" />
+<img width="660" height="1434" alt="IMG_7962" src="https://github.com/user-attachments/assets/18906a7a-7615-42a1-ac5a-fd3faa078b9f" />
+<img width="660" height="1434" alt="IMG_7964" src="https://github.com/user-attachments/assets/1341d61a-1e94-4d3a-b277-39ee27d16aae" />
+<img width="660" height="1434" alt="IMG_7965" src="https://github.com/user-attachments/assets/987c34e9-102b-4816-9fcf-66b0ae0bf464" />
+<img width="660" height="1434" alt="IMG_7967" src="https://github.com/user-attachments/assets/06c0d9d5-c118-42f8-9b4f-384c61cc507b" />
+<img width="660" height="1434" alt="IMG_7961" src="https://github.com/user-attachments/assets/d4d2d87d-6140-44c3-a0b4-acd232dafd16" />
+<img width="660" height="1434" alt="IMG_7968" src="https://github.com/user-attachments/assets/6ef19766-17d2-489a-b27e-04d3a4c81713" />
+<img width="660" height="1434" alt="IMG_7969" src="https://github.com/user-attachments/assets/78144d7d-eec5-4f28-b859-f1693711049f" />
+<img width="660" height="1434" alt="IMG_7970" src="https://github.com/user-attachments/assets/d8e9bb49-edd1-40c7-8402-d9197eb688c2" />
+<img width="660" height="1434" alt="IMG_7971" src="https://github.com/user-attachments/assets/1c4e8554-f545-4e9d-a52c-b4a1f63eef3e" />
+
+
+
 
 
 
