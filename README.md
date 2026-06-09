@@ -16,10 +16,8 @@ A full-featured notes application for iOS, inspired by Apple Notes, as a part of
 <img width="660" height="1434" alt="IMG_7970" src="https://github.com/user-attachments/assets/d8e9bb49-edd1-40c7-8402-d9197eb688c2" />
 <img width="660" height="1434" alt="IMG_7971" src="https://github.com/user-attachments/assets/1c4e8554-f545-4e9d-a52c-b4a1f63eef3e" />
 
-
-
-
-
+## Video 
+https://github.com/user-attachments/assets/a8793181-a312-4e90-8ed8-61afdc3b6c80
 
 ## Features 
 ### Notes 
