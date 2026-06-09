@@ -3,6 +3,9 @@
 A full-featured notes application for iOS, inspired by Apple Notes, as a part of my portfolio. It was build with SwiftUI, SwiftData and deep UIKit integration for rich text editing. 
 
 ## Screenshots 
+<img width="660" height="1434" alt="IMG_7959" src="https://github.com/user-attachments/assets/5e735c33-f80d-425e-b4cd-6008146ce351" />
+<img width="660" height="1434" alt="IMG_7960" src="https://github.com/user-attachments/assets/b130f3cb-6862-4dbc-a213-2656f47f9316" />
+
 
 
 ## Features 
@@ -99,8 +102,8 @@ NotesApp/
 
 ## Requirements
 
-- iOS 17.0+
-- Xcode 16+
+- iOS 26.0+
+- Xcode 26+
 - Swift 5.9+
 
 ## Author
