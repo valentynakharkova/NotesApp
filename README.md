@@ -65,10 +65,10 @@ https://github.com/user-attachments/assets/a8793181-a312-4e90-8ed8-61afdc3b6c80
 6. **NSTextStorage** - Direct text editing with beginEditing/endEditing;
 7. **NSTextAttachment** - Checkbox rendering with SF Symbols;
 8. **NSTextList** - Bullet, numbered, and dash list formatting;
-9. NSParagraphStyle - Indentation, alignment, list configuration;
-10. UIPanGestureRecognizer - Swipe-to-dismiss keyboard;
-11. UITapGestureRecognizer - Checkbox tap detection;
-12. RTF encoding - Attributed text serialized to Data via RTF for SwiftData storage.
+9. **NSParagraphStyle** - Indentation, alignment, list configuration;
+10. **UIPanGestureRecognizer** - Swipe-to-dismiss keyboard;
+11. **UITapGestureRecognizer** - Checkbox tap detection;
+12. **RTF encoding** - Attributed text serialized to Data via RTF for SwiftData storage.
 
 ## Architecture 
 ```
