@@ -2,6 +2,9 @@
 
 A full-featured notes application for iOS, inspired by Apple Notes, as a part of my portfolio. It was build with SwiftUI, SwiftData and deep UIKit integration for rich text editing. 
 
+## Screenshots 
+
+
 ## Features 
 ### Notes 
 1. Create, edit, and delete notes with a title and rich text body;
@@ -86,9 +89,23 @@ NotesApp/
 1. **UIKit UITextView over native SwiftUI TextEditor** -  SwiftUI's TextEditor with AttributedString (iOS 18) was explored but lacks the control needed for checklists, list indentation, and gesture handling. UITextView with NSAttributedString provides direct access to NSTextStorage; 
 2. **ViewModel owns UITextView** - RichTextEditorViewModel creates and owns the UITextView instance, passing it into both RichTextEditor (for rendering) and FormattingToolbar (for formatting). This avoids duplicating state and keeps the view layer thin;
 **NSTextAttachment subclasses for checkbox state** - Checkbox state is tracked via UncheckedAttachment and CheckedAttachment subclasses rather than image comparison. This makes toggle detection reliable with a simple is check;
-**RTF serialization for SwiftData** - NSAttributedString is encoded to Data using RTF format and stored in Note.bodyData. On read, it is decoded back. This preserves all formatting attributes including fonts, colors, lists, and attachments across sessions;
-**Soft delete pattern** - Notes and folders are never immediately deleted. An isDeleted flag moves them to Recently Deleted, and a deleteDate enables automatic cleanup after 30 days via cleanupExpiredNotes.
+3. **RTF serialization for SwiftData** - NSAttributedString is encoded to Data using RTF format and stored in Note.bodyData. On read, it is decoded back. This preserves all formatting attributes including fonts, colors, lists, and attachments across sessions;
+4. **Soft delete pattern** - Notes and folders are never immediately deleted. An isDeleted flag moves them to Recently Deleted, and a deleteDate enables automatic cleanup after 30 days via cleanupExpiredNotes.
 
+## Challenges 
+1. **Formatting Toolbar** - Building a toolbar that controls a UIKit UITextView from SwiftUI required bridging two different worlds. Passing the UITextView instance and Coordinator through the view hierarchy without losing state was the first hurdle. Getting lists, checklists, alignment, and cursor position to behave like Apple Notes took significant iteration — each feature had its own edge cases;
+2. **Checklists and Lists** - NSTextAttachment (checklists) and NSTextList (bullet/numbered/dash) are fundamentally different systems that don't share indentation logic. Making them look and behave consistently required careful matching of firstLineHeadIndent, headIndent, and kern. The Enter key behavior, cursor jumping, and empty line edge cases each needed separate handling;
+3. **SwiftData Integration** - NSAttributedString cannot be stored directly in SwiftData. The solution was to encode it to RTF Data and decode it on read. Designing the Note model so that rich text survived save/load cycles without losing formatting took careful testing.
+
+## Requirements
+
+- iOS 17.0+
+- Xcode 16+
+- Swift 5.9+
+
+## Author
+Valentyna Kharkova — Junior iOS Developer
+Building a native iOS portfolio | 2025–2026
 
 
 
