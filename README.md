@@ -54,7 +54,7 @@ A full-featured notes application for iOS, inspired by Apple Notes, as a part of
 12. RTF encoding - Attributed text serialized to Data via RTF for SwiftData storage.
 
 ## Architecture 
-
+```
 NotesApp/
 ├── Models/
 │   ├── Note.swift               — SwiftData model; RTF encode/decode for attributed body
@@ -81,18 +81,13 @@ NotesApp/
     ├── RichTextEditor+Lists.swift     — NSTextList insertion, toggling, cursor restoration
     ├── RichTextEditor+Checklist.swift — Checkbox insert, toggle, Enter key handling
     └── RichTextEditor+Helpers.swift   — NSTextAttachment factory, UITextView extensions
-
+```
 ## Key Design Decisions 
-**UIKit UITextView over native SwiftUI TextEditor:**  
-  SwiftUI's TextEditor with AttributedString (iOS 18) was explored but lacks the control needed for checklists, list indentation, and gesture handling. UITextView with          NSAttributedString provides direct access to NSTextStorage.
-**ViewModel owns UITextView:**
-  RichTextEditorViewModel creates and owns the UITextView instance, passing it into both RichTextEditor (for rendering) and FormattingToolbar (for formatting). This avoids      duplicating state and keeps the view layer thin.
-NSTextAttachment subclasses for checkbox state
-Checkbox state is tracked via UncheckedAttachment and CheckedAttachment subclasses rather than image comparison. This makes toggle detection reliable with a simple is check.
-RTF serialization for SwiftData
-NSAttributedString is encoded to Data using RTF format and stored in Note.bodyData. On read, it is decoded back. This preserves all formatting attributes including fonts, colors, lists, and attachments across sessions.
-Soft delete pattern
-Notes and folders are never immediately deleted. An isDeleted flag moves them to Recently Deleted, and a deleteDate enables automatic cleanup after 30 days via cleanupExpiredNotes.
+1. **UIKit UITextView over native SwiftUI TextEditor** -  SwiftUI's TextEditor with AttributedString (iOS 18) was explored but lacks the control needed for checklists, list indentation, and gesture handling. UITextView with NSAttributedString provides direct access to NSTextStorage; 
+2. **ViewModel owns UITextView** - RichTextEditorViewModel creates and owns the UITextView instance, passing it into both RichTextEditor (for rendering) and FormattingToolbar (for formatting). This avoids duplicating state and keeps the view layer thin;
+**NSTextAttachment subclasses for checkbox state** - Checkbox state is tracked via UncheckedAttachment and CheckedAttachment subclasses rather than image comparison. This makes toggle detection reliable with a simple is check;
+**RTF serialization for SwiftData** - NSAttributedString is encoded to Data using RTF format and stored in Note.bodyData. On read, it is decoded back. This preserves all formatting attributes including fonts, colors, lists, and attachments across sessions;
+**Soft delete pattern** - Notes and folders are never immediately deleted. An isDeleted flag moves them to Recently Deleted, and a deleteDate enables automatic cleanup after 30 days via cleanupExpiredNotes.
 
 
 
