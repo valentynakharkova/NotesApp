@@ -2,6 +2,9 @@
 
 A full-featured notes application for iOS, inspired by Apple Notes, as a part of my portfolio. It was build with SwiftUI, SwiftData and deep UIKit integration for rich text editing. 
 
+## Icon
+<img width="284" height="319" alt="IMG_8041" src="https://github.com/user-attachments/assets/a9533eb5-7ee8-4a36-991c-62af80069df4" />
+
 ## Screenshots 
 <img width="660" height="1434" alt="IMG_7959" src="https://github.com/user-attachments/assets/5e735c33-f80d-425e-b4cd-6008146ce351" />
 <img width="660" height="1434" alt="IMG_7960" src="https://github.com/user-attachments/assets/b130f3cb-6862-4dbc-a213-2656f47f9316" />
