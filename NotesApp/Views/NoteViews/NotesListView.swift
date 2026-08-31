@@ -30,15 +30,15 @@ struct NotesListView: View {
             let folder = folder.name
             _notes = Query(
                 filter: #Predicate<Note> { note in
-                    note.folder?.name == folder
+                    note.folder?.name == folder && note.isTrashed == false
                 }, sort: \.dateModified, order: .reverse)
         } else if pinnedOnly {
             _notes = Query(filter: #Predicate<Note> { note in
-                note.isPinned == true
+                note.isPinned == true && note.isTrashed == false
             }, sort: \.dateModified, order: .reverse)
         } else {
             _notes = Query(filter: #Predicate<Note> { note in
-                note.folder == nil
+                note.folder == nil && note.isTrashed == false
             }, sort: \.dateModified, order: .reverse)
         }
     }

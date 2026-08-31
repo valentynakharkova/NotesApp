@@ -12,9 +12,9 @@ struct RecentlyDeletedView: View {
     
     @Environment(\.modelContext) private var context
     
-    @Query(filter: #Predicate<Folder> {$0.isDeleted == true},
+    @Query(filter: #Predicate<Folder> {$0.isTrashed == true},
            sort: \Folder.deleteDate, order: .reverse) private var deletedFolders: [Folder]
-    @Query(filter: #Predicate<Note> { $0.isDeleted == true },
+    @Query(filter: #Predicate<Note> { $0.isTrashed == true },
            sort: \Note.deleteDate, order: .reverse) private var deletedNotes: [Note]
     
     @State private var viewModel: NotesViewModel?

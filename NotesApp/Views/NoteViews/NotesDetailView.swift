@@ -26,8 +26,6 @@ struct NotesDetailView: View {
                 .onChange(of: note.title) { save() }
 
             RichTextEditor(attributedText: $editorViewModel.attributedText, textView: editorViewModel.textView)
-            
-            
         }
         .safeAreaInset(edge: .bottom) {
             FormattingToolbar(textView: editorViewModel.textView, coordinator: editorViewModel.coordinator)

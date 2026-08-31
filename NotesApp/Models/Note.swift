@@ -16,7 +16,7 @@ class Note {
     var dateCreated: Date
     var dateModified: Date
     var isPinned: Bool
-    var isDeleted: Bool
+    var isTrashed: Bool
     var folder: Folder?
     var deleteDate: Date?
     
@@ -26,7 +26,7 @@ class Note {
         self.dateCreated = .now
         self.dateModified = .now
         self.isPinned = false
-        self.isDeleted = false
+        self.isTrashed = false
         self.folder = folder
     }
     

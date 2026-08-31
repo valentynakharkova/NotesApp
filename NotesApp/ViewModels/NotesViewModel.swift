@@ -44,7 +44,7 @@ class NotesViewModel {
     
     //MARK: Soft Delete Note
     func softDeleteNote(_ note: Note) {
-        note.isDeleted = true
+        note.isTrashed = true
         note.deleteDate = .now
         note.isPinned = false
         saveContext()
@@ -52,7 +52,7 @@ class NotesViewModel {
     
     //MARK: Restore Note
     func restoreNote(_ note: Note) {
-        note.isDeleted = false
+        note.isTrashed = false
         note.deleteDate = nil
         saveContext()
     }
@@ -94,11 +94,11 @@ class NotesViewModel {
     
     //MARK: Soft Delete Folder
     func softDeleteFolder(_ folder: Folder) {
-        folder.isDeleted = true
+        folder.isTrashed = true
         folder.deleteDate = .now
         folder.isPinned = false
         for note in folder.notes {
-            note.isDeleted = true
+            note.isTrashed = true
             note.deleteDate = .now
         }
         context.delete(folder)

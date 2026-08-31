@@ -49,7 +49,7 @@ struct FormattingToolbar: View {
         }
         .padding(12)
         .foregroundStyle(.primary)
-        .font(.system(.title))
+        .font(.system(size: 24))
         .glassEffect()
         .padding(.bottom, 8)
         

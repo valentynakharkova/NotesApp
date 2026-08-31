@@ -10,9 +10,9 @@ import SwiftData
 
 struct FoldersView: View {
     @Environment(\.modelContext) private var context
-    @Query(filter: #Predicate<Folder> { $0.isDeleted == false },
+    @Query(filter: #Predicate<Folder> { $0.isTrashed == false },
            sort: \Folder.order, order: .forward) private var folders: [Folder]
-    @Query(filter: #Predicate<Note> { $0.isDeleted == false }) private var allNoes: [Note]
+    @Query(filter: #Predicate<Note> { $0.isTrashed == false }) private var allNoes: [Note]
     
     
     @State private var viewModel: NotesViewModel?
